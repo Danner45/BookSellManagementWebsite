@@ -1,0 +1,108 @@
+﻿@model Project_64130005.Models.KhachHang
+
+@{
+    ViewBag.Title = "OrderList_64130005";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="app__container">
+    <div class="grid">
+        <div class="grid__row app__content">
+            <div class="grid__column-2">
+                @{
+                    Html.RenderPartial("menuProfile");
+                }
+            </div>
+
+
+            <div class="grid__column-10">
+                <div class="ordList-filter" style="padding:10px">
+                    <a href="@Url.Action("OrderList_64130005","KhachHang_64130005",new {sr = "" })" class="ordList-filter__btn btn">Tất cả</a>
+                    <a href="@Url.Action("OrderList_64130005","KhachHang_64130005",new {sr = "Wait" })" class="ordList-filter__btn btn">Chưa xác nhận</a>
+                    <a href="@Url.Action("OrderList_64130005","KhachHang_64130005",new {sr = "Deli" })" class="ordList-filter__btn btn">vận chuyển</a>
+                    <a href="@Url.Action("OrderList_64130005","KhachHang_64130005",new {sr = "Done" })" class="ordList-filter__btn btn">hoàn thành</a>
+                    <a href="@Url.Action("OrderList_64130005","KhachHang_64130005",new {sr = "Cancel" })" class="ordList-filter__btn btn">Đã hủy</a>
+
+                </div>
+                @*@using (Html.BeginForm("OrderList", "Account", FormMethod.Get, new { @class = "dataTables_filter d-flex justify-content-end" }))
+                    {
+                        @Html.TextBox("sr", null, new { @class = "ordList-search", placeholder = "Tìm kiếm theo ID đơn hàng" })
+                    }*@
+                @foreach (var order in ViewBag.orderList)
+                {
+                    if (order.MaKH == Model.MaKH)
+                    {
+                        <div class="ordList-item">
+                            <div class="ordList-item__label">
+                                <span class="ordList-item__label-id">
+                                    #@order.MaDH
+                                    @if (order.MaThanhToan != null)
+                                    {
+                                        <span> đã thanh toán</span>
+                                    }
+                                    else
+                                    {
+                                        <span> chưa thanh toán </span>
+                                    }
+                                </span>
+                                <span>Trạng thái: <span class="ordList-item__label-status">@order.MaTrangThai</span> </span>
+
+                            </div>
+
+                            <ul class="ordList-item__order">
+                                @foreach (var item in ViewBag.orderDetail)
+                                {
+                                    if (item.MaDH == order.MaDH)
+                                    {
+
+                                        <li class="ordList-item__order-item">
+                                            <div class="ordList-item__order-product">
+                                                <img src="~/Images/SanPham/@Url.Content(item.Sach.AnhSach)"
+                                                     alt="" class="ordList-item__order-img">
+                                                <div class="orderList-item__order-info">
+                                                    <h4 class="ordList-item__order-name"> @item.Sach.TenSach  </h4>
+                                                    <span class="ordList-item__order-brand">Phân loại hàng: @item.Sach.TheLoai.TenLoai</span>
+                                                    <span class="ordList-item__order-quanti">x @item.SoLuong</span>
+                                                </div>
+                                            </div>
+                                            <span class="ordList-item__order-price"> @string.Format("{0:#,0}", item.Sach.DonGia) đ</span>
+                                        </li>
+                                    }
+                                }
+
+                            </ul>
+                            <div class="ordList-item__footer">
+                                <div class="ordList-item__footer-date">
+                                    <div class="ordList-item__footer-dateOrd">Ngày đặt: @(order.NgayDat?.ToString("dd/MM/yyyy"))</div>
+                                </div>
+
+                                <div>
+                                    @if (order.MaTrangThai == "Chưa giao hàng")
+                                    {
+                                        <button class="btn btn--danger orderList-btn--cancel"
+                                                onclick="location.href='@Url.Action("CancelOrder_64130005", "KhachHang_64130005",new { MaDH = order.MaDH })'">
+                                            Hủy đơn hàng
+                                        </button>
+                                    }
+
+                                    <button class="btn btn--success"
+                                            onclick="location.href='@Url.Action("DonHang_64130005", "KhachHang_64130005",new { MaDH = order.MaDH })'">
+                                        Xem đơn hàng
+                                    </button>
+
+                                    <span style="border-left: 1px solid black;padding: 8px">Tổng tiền: <span class="ordList-item__footer-price">  @string.Format("{0:#,0}", order.TongTien) đ</span></span>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

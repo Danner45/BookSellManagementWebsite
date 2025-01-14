@@ -1,0 +1,181 @@
+﻿@using Project_64130005.Models
+@model Project_64130005.Models.Sach
+
+@{
+    ViewBag.Title = Model.TenSach;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <link rel="icon" type="image/jpg" sizes="32x32" href="~/Images/SanPham/@Url.Content(Model.AnhSach)" />
+    Project_64130005.Models.KhachHang kh = (Project_64130005.Models.KhachHang)Session["Taikhoan"];
+}
+@Html.HiddenFor(Model => Model.MaSach)
+<div class="app__container">
+    <div class="grid app__content" style="padding-top:0;">
+        <div class="grid__row" style="padding:40px 0;">
+            <div class="grid__column-6 detail__picture-layout">
+                <img src="~/Images/SanPham/@Url.Content(@Model.AnhSach)" alt="" class="detail__picture">
+            </div>
+            <div class="grid__column-8 detail">
+                <h2 class="detail__name">@Model.TenSach</h2>
+                <div class="detail__quanti">
+                    <span style="color: var(--primary-color); border: 1px solid var(--primary-color)"></span>
+                    <span class="detail__ProductSold">| @Model.DaBan đã bán </span>
+                </div>
+                @if (Model.GiamGia == 0)
+                {
+                    <div class="detail__price">
+                        <span class="detail__unit-price">@string.Format("{0:#,0}", Model.DonGia) đ</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="detail__price">
+                        <span class="detail__price-old">@string.Format("{0:#,0}", Model.DonGia) đ</span>
+                        <span class="detail__unit-price">@string.Format("{0:#,0}", (Model.DonGia - (Model.DonGia * Model.GiamGia/100))) đ</span>
+                        <span class="detail__product-sale"> @Model.GiamGia% Giảm</span>
+                    </div>
+                }
+
+            <div class="detail__info">
+                @if (kh != null)
+                {
+                    <div class="detail__info-deli">
+                        <span class="detail__info-label">Vận chuyển: </span>Tới địa chỉ: @kh.DiaChi
+                    </div>
+                }
+                <div class="detail__info-brand">
+                    <span class="detail__info-label">Thể loại: </span> @Model.TheLoai.TenLoai
+                </div>
+                <div class="detail__info-quanti">
+                    <span class="detail__info-label">Tình trạng: </span>
+                    @if (Model.SoLuong > 0)
+                    {<span>Còn hàng</span> }
+                    else
+                    { <span style="text-decoration: line-through red"> Hết hàng </span>}
+                </div>
+                <div class="detail__info-brand">
+                    <span class="detail__info-label">Tác giả: </span> @Model.TacGia.TenTG
+                </div>
+                <div class="detail__info-brand">
+                    <span class="detail__info-label">Nhà xuất bản: </span> @Model.NhaXuatBan.TenNXB
+                </div>
+            </div>
+                <div class="detail__desc">
+                    <h3>Mô tả </h3>
+                    @Html.Raw(Model.MoTa)
+                </div>
+                @if (Model.SoLuong > 0)
+                {
+                    <div class="detail__operation">
+                        <button class="detail__operation-addCart btn btn-order" type="button" title="Order"
+                                onclick="location.href='@Url.Action("Themgiohang", "GioHang_64130005", new { MaSach = @Model.MaSach, @strURL = Request.Url.ToString() })'">
+                            Thêm vào giỏ hàng
+                        </button>
+                        <button class="detail__operation-buynow btn" onclick="location.href='@Url.Action("BuyNow", "GioHang_64130005", new { MaSach = @Model.MaSach })'">Mua ngay</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="detail__operation">
+                        <button class="detail__operation-addCart btn btn-order" onclick="location.href='@Url.Action("Index", "Home")'">Quay về trang chủ</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<style>
+    .detail__picture {
+        width: 100%;
+        height: 90%;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .detail__picture-layout{
+        width: fit-content;
+        height: 500px;
+        border: 2px solid var(--main-color);
+        display: flex;
+        align-items: center;
+        background-color: white;
+    }
+
+    .detail {
+        font-size: 1.6rem;
+        position: relative;
+    }
+
+    .detail__price {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        background-color: #F5F5F5;
+    }
+
+    .detail__price-old {
+        color: #878787;
+        margin-right: 10px;
+        text-decoration: line-through;
+    }
+
+    .detail__unit-price {
+        margin-right: 10px;
+        color: #D0011B;
+        font-size: 2.6rem;
+    }
+
+    .detail__product-sale {
+        text-transform: uppercase;
+        background-color: #D0011B;
+        padding: 5px;
+        color: var(--white-color);
+    }
+
+    .detail__info {
+        margin: 10px 0;
+    }
+
+    .detail__info-label {
+        display: inline-block;
+        width: 100px;
+        height: 30px;
+        color: #878787;
+    }
+
+    .__info-deli {
+    }
+
+    .detail__info-brand {
+    }
+
+    .detail__info-quanti {
+    }
+
+    .detail__operation {
+    }
+
+    .detail__operation-addCart {
+        color: var(--main-color);
+        border: 1px solid var(--main-color);
+        padding: 0px 4px;
+    }
+
+        .detail__operation-addCart .fa-cart-plus {
+            display: inline-block;
+            margin: 0 8px;
+        }
+
+    .detail__operation-buynow {
+        background-color: var(--main-color);
+        color: var(--white-color);
+    }
+
+    .detail__ul li {
+        color: #6f6c6c;
+        margin: 15px 0;
+    }
+</style>

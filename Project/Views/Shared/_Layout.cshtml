@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Assets/img/shopify.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="~/Assets/Css/base.css">
+    <link rel="stylesheet" href="~/Assets/Css/main.css">
+    @Styles.Render("~/Assets/Css/responsive.css")
+
+</head>
+<body>
+
+    <div class="app">
+        @{
+            Html.RenderPartial("_NavHeader");
+        }
+
+        @RenderBody()
+
+        @{
+            Html.RenderPartial("_Footer");
+        }
+    </div>
+
+    <div class="modal">
+        <div class="modal__overlay">
+
+        </div>
+        <div class="modal__body">
+            <h1>Đã thêm sản phẩm vào giỏ hàng thành công</h1>
+            <button class="btnbtn--primary" tabindex="1" style="display: inline-block;">OK</button>
+        </div>
+
+    </div>
+
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <script src="/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/myScript.js"></script>
+
+</body>
+</html>

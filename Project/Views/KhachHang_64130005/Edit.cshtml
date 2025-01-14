@@ -1,0 +1,105 @@
+﻿@model Project_64130005.Models.KhachHang
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="grid row" style="text-align:center">
+    <div class="form-horizontal">
+
+        <h4>Thông tin tài khoản</h4>
+        <hr />
+        @using (Html.BeginForm("Edit", "KhachHang_64130005", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "validate" })
+            @Html.HiddenFor(model => model.MaKH)
+            @Html.ValidationSummary(true, "", new { @class = "validate" })
+            @Html.HiddenFor(model => model.MatKhau)
+            @Html.ValidationSummary(true, "", new { @class = "validate" })
+            @Html.HiddenFor(model => model.ConfirmPassword)
+
+            <div class="grid__row">
+                <div class=" grid__column-2-4">
+                    <h5>Tên</h5>
+                    <div class="grid__full-width">
+                        @Html.EditorFor(model => model.TenKH, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TenKH, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class=" grid__column-2-4">
+                    <h5>Họ</h5>
+                    <div class="grid__full-width">
+                        @Html.EditorFor(model => model.HoKH, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.HoKH, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class=" grid__column-2-4">
+                    <h5>Ngày sinh</h5>
+                    <div class="grid__full-width">
+                        @Html.EditorFor(model => model.NgaySinh, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NgaySinh, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class=" grid__column-2-4">
+                    <h5>Chứng minh thư</h5>
+                    <div class="grid__full-width">
+                        @Html.EditorFor(model => model.CCCD, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CCCD, "", new { @class = "validate" })
+                    </div>
+                </div>
+
+                <div class=" grid__column-2-4">
+                    <h5>Email</h5>
+                    <div class="grid__full-width">
+                        @Html.EditorFor(model => model.Emai, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Emai, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="" style="width: 50%; padding: 0 5px">
+                    <h5>Địa chỉ</h5>
+                    <div class="grid__full-width">
+                        @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DiaChi, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class=" grid__column-2-4">
+                    <h5>Số điện thoại</h5>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.SDT, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SDT, "", new { @class = "validate" })
+                    </div>
+                </div>
+
+                <div class="grid__column-2-5"></div>
+                <div class="grid__column-2-5"></div>
+
+                <div class="grid__column-2-5">
+                    <h5>Ảnh đại diện</h5>
+                    <div id="myfileupload" class="col-md-10">
+                        <input type="file" name="file" id="file" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.AnhKH, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="grid__column-2-5"></div>
+
+                <div class="grid__column-2-5"></div>
+
+
+            </div>
+
+
+            <hr />
+            <div class=" center">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Sửa" class="btn btn--primary" />
+                </div>
+                <div>
+                    @Html.ActionLink("Quay về", "Details", "KhachHang_64130005", new { @class = "btn btn--default" })
+                </div>
+            </div>
+        }
+    </div>
+</div>

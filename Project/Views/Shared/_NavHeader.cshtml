@@ -1,0 +1,238 @@
+﻿@using System.Collections.Generic;
+@using Project_64130005.Models;
+@{ 
+    List<GioHang_64130005> list = (List<GioHang_64130005>)Session["Giohang"] as List<GioHang_64130005>;
+    Project_64130005Entities1 db = new Project_64130005Entities1();
+    KhachHang khsession = (KhachHang)Session["Taikhoan"];
+    KhachHang kh;
+    if (khsession != null)
+    {
+        kh = db.KhachHangs.Find(khsession.MaKH);
+        var dsOrder = (from s in db.DonHangs
+                       where s.MaKH == kh.MaKH
+                       select s).ToList();
+    }
+    else { kh = null; }
+}
+<header class="header">
+    <div class="grid">
+        <nav class="navbar">
+            <ul class="navbar__list">
+                <li class="navbar__item">
+                    <span class="navbar__title--no-pointer" style="color: #044785">Kết nối</span>
+                    <a href="https://www.facebook.com/hoangduyan2004/" class="navbar__icon-link" style="color: #044785 "><i class="navbar__icon fa-brands fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/vibefree.vn/" class="navbar__icon-link" style="color: #044785"><i class="navbar__icon fa-brands fa-instagram"></i></a>
+                </li>
+            </ul>
+            <ul class="navbar__list">
+                @if (kh != null)
+                {
+                    <li class="navbar__item navbar__has-notify">
+                        <a href="" class="navbar__item-link">
+                            <i class="navbar__icon fa-solid fa-bell"></i>Thông báo
+                        </a>
+                        <div class="navbar__notify">
+                            <header class="navbar__notify-header">
+                                <h3>Thông báo mới nhận</h3>
+                            </header>
+                            <ul class="navbar__notify-list">
+                                @{
+                                    var dsOrder = (from s in db.DonHangs
+                                                   where s.MaKH == kh.MaKH
+                                                   select s).ToList();
+                                    foreach (var noti in dsOrder)
+                                    {
+                                        <li class="navbar__notify-item navbar__notify-item--viewed">
+                                            <a href="" class="navbar__notify-link">
+                                                <img src="~/Hinh/deli.png"
+                                                     alt="" class="navbar__notify-img">
+                                                <div class="navbar__notify-info">
+                                                    @{
+                                                        if (noti.MaTrangThai == "Hoàn thành")
+                                                        {
+                                                            <span class="navbar__notify-name"> Chia sẻ nhận xét về sản phẩm </span>
+                                                            <span class="navbar__notify-desc" style="text-transform:lowercase">
+                                                                Đơn hàng #@noti.MaDH @noti.MaTrangThai.
+                                                                <span>
+                                                                    Bạn hãy đánh giá sản phẩm trước ngày xu và giúp người dùng khác hiểu
+                                                                    hơn về sản phẩm nhé!
+                                                                </span>
+                                                            </span>
+                                                        }
+                                                        else if (noti.MaTrangThai == "Đang giao hàng")
+                                                        {
+                                                            <span class="navbar__notify-name"> Xem tình trạng đơn hàng </span>
+                                                            <span class="navbar__notify-desc" style="text-transform:lowercase">
+                                                                Đơn hàng #@noti.MaDH @noti.MaThanhToan.
+                                                                <span>
+                                                                    Vui lòng kiên nhẫn đợi sản phẩm giao tới tay bạn nhé !
+                                                                </span>
+                                                            </span>
+                                                        }
+                                                    }
+                                                </div>
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                            <footer class="navbar_notify-footer">
+                                <a href="@Url.Action("OrderList_64130005","KhachHang_64130005")" class="navbar_notify-footer-btn">Xem tất cả</a>
+                            </footer>
+                        </div>
+                    </li>
+                }
+                <li class="navbar__item">
+                    <a href="@Url.Action("Contact","Home")" class="navbar__item-link">
+                        <i class="navbar__icon fa-solid fa-circle-question"></i>Trợ giúp
+                    </a>
+                </li>
+
+                @{if (kh != null)
+                    {
+                        <li class="navbar__item navbar__item-user">
+                            @{ if (kh.AnhKH != null)
+                                {
+                                    <img src="~/Images/KhachHang/@Url.Content(kh.AnhKH)"
+                                         alt="" class="navbar__item-user-avt">
+                                }
+                                else
+                                {
+                                    <img src="~/Images/KhachHang/user.jpg" alt="" class="navbar__item-user-avt">
+                                }
+                            }
+                            <span class="navbar__item-user-name"> @kh.FullName()</span>
+                            <ul class="navbar__item-user-menu">
+                                <li class="navbar__item-user-item">
+                                    <a href="@Url.Action("Details","KhachHang_64130005")"> Tài khoản của tôi</a>
+                                </li>
+                                <li class="navbar__item-user-item">
+                                    <a href="@Url.Action("ChangePassword_64130005","KhachHang_64130005", new {idUser = kh.MaKH })"> Đổi mật khẩu</a>
+                                </li>
+                                <li class="navbar__item-user-item">
+                                    <a href="@Url.Action("OrderList_64130005","KhachHang_64130005")">Đơn mua</a>
+                                </li>
+                                <li class="navbar__item-user-item">
+                                    <a href="@Url.Action("Logout_64130005","KhachHang_64130005")" class="btn btn-warning">Đăng xuất</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="navbar__item navbar__item--strong navbar__item--separate">
+                            @Html.ActionLink("Đăng ký", "Register_64130005", "KhachHang_64130005", null, new { @class = "navbar__item navbar__item--strong" })
+
+                        </li>
+                        <li class="navbar__item navbar__item--strong">
+                            @Html.ActionLink("Đăng nhập", "Login_64130005", "KhachHang_64130005", null, new { @class = "navbar__item navbar__item--strong" })
+                        </li>
+                    }
+
+                }
+
+
+            </ul>
+        </nav>
+        <!-- Header Search -->
+        <div class="header-search">
+            <div class="header-search__logo">
+                <a href="~/Home">
+                    <img src="~/Images/logo_pn.png" class="header-search__logo-img" />
+                </a>
+            </div>
+            @* Tìm kiếm sản phẩm theo tên - Thịnh *@
+            @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "header-search__box-search" }))
+            {
+                <div class="header-search__box-search-wrap">
+                    @Html.TextBox("searchStr", null, new { @class = "header-search__box-search-input", @placeholder = "Tìm kiếm sản phẩm" })
+                </div>
+
+
+                <button class="header-search__box-search-btn" onclick="location.href='@Url.Action("Index", "Home")'">
+                    <i class="header-search__box-search-btn-icon fa-solid fa-magnifying-glass"></i>
+                </button>
+            }
+
+            @{int TongSoLuong()
+                {
+                    int iTongSoLuong = 0;
+                    List<GioHang_64130005> listGiohang = Session["Giohang"] as List<GioHang_64130005>;
+                    if (listGiohang != null)
+                    {
+                        iTongSoLuong = listGiohang.Sum(n => n.SoLuong);
+                    }
+                    return iTongSoLuong;
+                }
+                ViewBag.TongSoLuong = TongSoLuong();
+            }
+            <div class="header-search__cart">
+                <i class="header-search__cart-icon fa-solid fa-cart-shopping"></i>
+                <span class="header__cart-notice">@ViewBag.TongSoLuong</span>
+                @{if (list != null)
+                    {
+                        if (list.Count != 0)
+                        {
+                            <div class="header-search__cart-list">
+                                <h4 class="header__cart-heading">Sản phẩm đã thêm</h4>
+
+                                <ul class="header__cart-list-item">
+                                    <!-- cart-item -->
+                                    @foreach (var item in list)
+                                    {
+                                        <li class="header__cart-item">
+                                            <img src="~/Images/SanPham/@Url.Content(@item.AnhSach)" alt="" class="header__cart-img">
+                                            <div class="header__cart-item-info">
+                                                <div class="header__cart-item-head">
+                                                    <h5 class="header__cart-item-name">@item.TenSach</h5>
+                                                    <div class="header__cart-item-price-wrap">
+                                                        <span class="header__cart-item-price">@string.Format("{0:#,0}", item.ThanhTien)</span>
+                                                        <span class="header__cart-item-multiply">x</span>
+                                                        <span class="header__cart-item-qty">@item.SoLuong</span>
+                                                    </div>
+                                                </div>
+                                                <div class="header__cart-item-body">
+                                                    <span class="header__cart-item-description">Phân loại: @item.TheLoai</span>
+                                                    @Html.ActionLink("Xóa", "Xoagiohang", "GioHang_64130005", new { @MaSach = item.MaSach }, new { @class = "header__cart-item-remove" })
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+
+
+                                <button class="btn btn--primary header__cart-view-cart"
+                                        onclick="location.href='@Url.Action("Index", "GioHang_64130005")'">
+                                    Xem giỏ hàng
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="header-search__cart-list header-search__cart-list--no-card">
+                                <img src="https://foodhub.vn/assets/images/no-cart.png" alt=""
+                                     class="header-search__no-cart-img">
+                                <div class="header-search__cart-list-no-cart-msg">Chưa có sản phẩm</div>
+                            </div>
+                        }
+
+                    }
+                    else
+                    {
+                        <div class="header-search__cart-list header-search__cart-list--no-card">
+                            <img src="https://foodhub.vn/assets/images/no-cart.png" alt=""
+                                 class="header-search__no-cart-img">
+                            <div class="header-search__cart-list-no-cart-msg">Chưa có sản phẩm</div>
+                        </div>
+
+                    }
+                }
+
+            </div>
+
+        </div>
+    </div>
+    <div style="background-color: #04478f; width: 100%; height: 10px; margin-top: 10px;"></div>
+</header>

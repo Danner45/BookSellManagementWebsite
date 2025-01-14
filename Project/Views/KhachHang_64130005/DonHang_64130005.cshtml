@@ -1,0 +1,88 @@
+﻿@model Project_64130005.Models.DonHang
+@using Project_64130005.Models
+
+@{
+    ViewBag.Title = "DonHang_64130005";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Project_64130005Entities1 db = new Project_64130005Entities1();
+}
+
+<div class="grid" id="sampleTable">
+    <div class="header__info">
+        <div class="header__info--KH">
+            <h1>Khách hàng: @Model.KhachHang.FullName()</h1>
+            <p>Địa chỉ giao hàng: @Model.KhachHang.DiaChi</p>
+            <p>Số điện thoại: @Model.KhachHang.SDT</p>
+            <p>Địa chỉ email: @Model.KhachHang.Emai</p>
+        </div>
+        <div class="header__info--Date">
+            <p>Ngày đặt hàng:@(Model.NgayDat?.ToString("dd/MM/yyyy"))</p>
+            <p>Ngày giao hàng: @(Model.NgayGiao?.ToString("dd/MM/yyyy"))</p>
+            <p>
+                Thanh Toán:
+                @if (Model.MaThanhToan == "ONL")
+                {
+                    <span>Thanh toán qua ví VNPAY</span>
+                }
+                else
+                {
+                    <span>Thanh toán bằng tiền mặt</span>
+                }
+            </p>
+            <p>Trạng thái: @Model.MaTrangThai</p>
+        </div>
+    </div>
+    <div class="body">
+        <ul class="ordList-item__order">
+            @foreach (var item in db.ChiTietDHs.ToList())
+            {
+                if (item.MaDH == Model.MaDH)
+                {
+
+                    <li class="ordList-item__order-item">
+                        <div class="ordList-item__order-product">
+                            <img src="~/Images/SanPham/@Url.Content(item.Sach.AnhSach)"
+                                 alt="" class="ordList-item__order-img">
+                            <div class="orderList-item__order-info">
+                                <h4 class="ordList-item__order-name"> @item.Sach.TenSach  </h4>
+                                <span class="ordList-item__order-brand">Phân loại hàng: @item.Sach.TheLoai.TenLoai</span>
+                                <span class="ordList-item__order-quanti">Số lượng: @item.SoLuong</span>
+                            </div>
+                        </div>
+                        <span class="ordList-item__order-price"> @string.Format("{0:#,0}", item.Sach.DonGia) đ</span>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="ordList-item__footer">
+        <div style="padding: 8px">Tổng tiền: <span class="ordList-item__footer-price">  @string.Format("{0:#,0}", Model.TongTien) đ</span></div>
+    </div>
+</div>
+<div class="grid" style="text-align: right;margin-bottom: 10px">
+    <button class="btn btn--success"
+            onclick="myApp.printTable()">
+        Xuất hóa đơn
+    </button>
+</div>
+
+<style>
+    .header__info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+
+<script>
+    //In dữ liệu
+    var myApp = new function () {
+        this.printTable = function () {
+            var tab = document.getElementById('sampleTable');
+            var win = window.open('', '', 'height=700,width=700');
+            win.document.write(tab.outerHTML);
+            win.document.close();
+            win.print();
+        }
+    }</script>
+

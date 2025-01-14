@@ -1,0 +1,85 @@
+﻿@Styles.Render("~/Assets/Css/main.css")
+
+<footer class="footer" style="border-top: 4px solid var(--main-color)">
+    <div class="grid">
+
+        <div class="grid__row">
+            <div class="grid__column-2-5">
+                <h3 class="footer__heading">Chăm sóc khách hàng</h3>
+                <ul class="footer__list">
+                    <li class="footer__list-item">
+                        <a href="" class="footer__list-item-link">Trung tâm trợ giúp</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="https://www.facebook.com/vibefreequanaocotton/" class="footer__list-item-link">Hướng dẫn đổi trả</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="" class="footer__list-item-link">Hướng dẫn mua hàng</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="grid__column-2-5">
+                <h3 class="footer__heading">Giới thiệu</h3>
+                <ul class="footer__list">
+                    <li class="footer__list-item">
+                        <a href="https://vibefree.vn/color/trang/" class="footer__list-item-link">Giới thiệu</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="https://www.facebook.com/vibefreequanaocotton/" class="footer__list-item-link">Tuyển dụng</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <div class="grid__column-2-5">
+                <h3 class="footer__heading">Danh mục</h3>
+                <ul class="footer__list">
+                    <li class="footer__list-item">
+                        <a href="@Url.Action("Index","Home", new {sort = "Văn Học Cổ Điển" })" class="footer__list-item-link">Văn Học Cổ Điển</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="@Url.Action("Index","Home", new {sort = "Văn Học Đương Đại" })" class="footer__list-item-link">Văn Học Đương Đại</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="@Url.Action("Index","Home", new {sort = "Kiếm Hiệp" })" class="footer__list-item-link">Kiếm Hiệp</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="@Url.Action("Index","Home", new {sort = "Phóng Sự" })" class="footer__list-item-link">Phóng Sự</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="@Url.Action("Index","Home", new {sort = "Tình Cảm" })" class="footer__list-item-link">Tình Cảm</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="@Url.Action("Index","Home", new {sort = "Truyện Ngắn" })" class="footer__list-item-link">Truyện Ngắn</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="@Url.Action("Index","Home", new {sort = "Trinh Thám" })" class="footer__list-item-link">Trinh Thám</a>
+                    </li>
+                </ul>   
+            </div>
+            <div class="grid__column-2-5">
+                <h3 class="footer__heading">Theo dõi chúng tôi</h3>
+                <ul class="social_media">
+                    <li style="--i:#5599ff;--j: #51dcff;">
+                        <span class="icon"><i class="fab fa-facebook"></i></span>
+                        <a href="https://www.facebook.com/hoangduyan2004/" class="titulo">Facebook</a>
+                    </li>
+                    <li style="--i:#a955ff;--j: #ea51ff;">
+                        <span class="icon"><i class="fab fa-instagram"></i></span>
+                        <a href="https://www.instagram.com/vibefree.vn/" class="titulo">Instagram</a>
+                    </li>
+                    <li style="--i:#7455ff;--j: #a251ff;">
+                        <span class="icon"><i class="fab fa-linkedin"></i></span>
+                        <span class="titulo">Linkedin</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer__bottom">
+            <div class="grid">
+                <p class="footer__text">© @DateTime.Now.Year - Copy right by Hoàng Duy An _ 64130005</p>
+            </div>
+        </div>
+
+    </div>
+</footer>

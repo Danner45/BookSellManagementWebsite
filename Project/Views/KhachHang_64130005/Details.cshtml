@@ -1,0 +1,187 @@
+﻿@model Project_64130005.Models.KhachHang
+
+@{
+    ViewBag.Title = "Trang cá nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Details</h2>
+
+    <div>
+        <h4>KhachHang</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.HoKH)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.HoKH)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TenKH)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenKH)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Emai)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Emai)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MatKhau)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MatKhau)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.AnhKH)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.AnhKH)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DiaChi)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DiaChi)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NgaySinh)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NgaySinh)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CCCD)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CCCD)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SDT)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SDT)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.MaKH }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+*@
+
+<div class="app__container">
+    <div class="grid">
+        <div class="grid__row app__content">
+            <div class="grid__column-2">
+                @{
+                    Html.RenderPartial("menuProfile");
+                }
+            </div>
+
+
+            <div class="grid__column-10">
+                <div class="profile">
+                    <div class="profile__heading">
+                        <h1 class="profile__heading-title">Hồ Sơ Của Tôi</h1>
+                        <div class="profile__heading-mota">Quản lí thông tin hồ sơ để bảo mật tài khoản</div>
+                    </div>
+                    <hr>
+                    <div class="profile_body">
+                        <div class="grid__row">
+                            <div class="grid__column-8">
+                                <table class="profile__info">
+
+                                    <tr class="profile__info-item">
+                                        <td class="profile__info-item--label">Email</td>
+                                        <td> @Model.Emai</td>
+                                    </tr>
+
+                                    <tr class="profile__info-item">
+                                        <td class="profile__info-item--label">Họ Tên</td>
+                                        <td>@Model.FullName()</td>
+                                    </tr>
+                                    <tr class="profile__info-item">
+                                        <td class="profile__info-item--label">Mật khẩu</td>
+                                        <td>@(new string('*', Model.MatKhau.Length))</td>
+                                    </tr>
+                                    <tr class="profile__info-item">
+                                        <td class="profile__info-item--label">Số điện thoại</td>
+                                        <td>@Model.SDT</td>
+                                    </tr>
+                                    <tr class="profile__info-item">
+                                        <td class="profile__info-item--label">Địa chỉ</td>
+                                        <td>@Model.DiaChi</td>
+                                    </tr>
+                                    <tr class="profile__info-item">
+                                        <td class="profile__info-item--label">CMND/CMT</td>
+                                        <td>@Model.CCCD</td>
+                                    </tr>
+                                    <tr class="profile__info-item">
+                                        <td class="profile__info-item--label">Ngày sinh</td>
+                                        <td>@(Model.NgaySinh?.ToString("dd-MM-yyyy"))</td>
+                                    </tr>
+                                    <tr class="profile__info-item">
+                                        <td class="profile__info-item--label"></td>
+                                        <td>
+                                            @Html.ActionLink("Sửa hồ sơ", "Edit", "KhachHang_64130005", new { @MaKH = @Model.MaKH }, new { @class = "btn btn--primary" })
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="grid__column-4 center">
+                                <div class="profile__avatar">
+                                    <div class="profile__avatar-item">
+                                        @{ if (Model.AnhKH != null)
+                                            {
+                                                <img src="~/Images/KhachHang/@Url.Content(Model.AnhKH)" alt="avatar" class="profile__avatar" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Images/KhachHang/user.jpg" alt="avatar" class="profile__avatar" />
+                                            }
+
+                                            }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    img.profile__avatar {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #dfdfdf;
+    }
+</style>
