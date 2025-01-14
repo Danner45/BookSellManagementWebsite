@@ -1,0 +1,104 @@
+﻿@model Project_64130005.Models.Sach
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin_64130005/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="app-title">
+    <ul class="app-breadcrumb breadcrumb side">
+        <li class="breadcrumb-item active"><a href="#"><b>Sách: #@Model.TenSach</b></a></li>
+    </ul>
+    <div id="clock"></div>
+</div>
+
+<div class="row detail">
+    <div class="col-md-4 detail__avatar">
+        <img src="~/Images/SanPham/@Model.AnhSach" alt="Ảnh đại diện" />
+    </div>
+    <div class="col-md-8">
+        <div class="detail__item">
+            <label class="control-label">Tên sách: </label>
+            @Model.TenSach
+        </div>
+        <div class="detail__item">
+            <label class="control-label">Thể loại: </label>
+            @Model.TheLoai.TenLoai
+        </div> <div class="detail__item">
+            <label class="control-label">Đơn giá: </label>
+            @Model.DonGia
+        </div> <div class="detail__item">
+            <label class="control-label">Số lượng tồn kho: </label>
+            @Model.SoLuong
+        </div> <div class="detail__item">
+            <label class="control-label">Ngày thêm: </label>
+            @(Model.NgayThem?.ToString("dd/MM/yyyy"))
+        </div>
+        <div class="detail__item">
+            <label class="control-label">Ngày chỉnh sửa gần nhất: </label>
+            @(Model.NgayChinhSua?.ToString("dd/MM/yyyy"))
+        </div>
+        <div class="detail__item">
+            <label class="control-label">Ngôn ngữ </label>
+            @Model.NgonNgu.TenNgonNgu
+        </div>
+        <div class="detail__item">
+            <label class="control-label">Nhà xuất bản: </label>
+            @Model.NhaXuatBan.TenNXB
+        </div>
+        <div class="detail__item">
+            <label class="control-label">Tác giả: </label>
+            @Model.TacGia.TenTG
+        </div>
+        <div class="detail__item">
+            <label class="control-label">Mô tả: </label>
+            @Html.Raw(Model.MoTa)
+        </div>
+        <div class="row btn">
+            <button class="btn btn-save btn-sm edit" type="button" title="Sửa"
+                    onclick="location.href='@Url.Action("Edit", "Sach_64130005",new { id = Model.MaSach })'">
+                Chỉnh sửa thông tin
+            </button>
+            <a class="btn btn-cancel" href="@Url.Action("Index","Sach_64130004")">Hủy bỏ</a>
+        </div>
+    </div>
+
+    <style>
+        .detail {
+            display: flex;
+            /*align-items: center;*/
+            justify-content: center;
+        }
+
+        detail__avatar {
+        }
+
+        .detail__avatar img {
+            margin: 20px 0;
+            height: 50%;
+            width: 80%;
+            object-fit: cover;
+        }
+
+        .detail__item {
+            margin: 20px 0;
+            display: block;
+            width: 100%;
+            padding: 0.375rem 0.75rem;
+            font-size: 15px;
+            line-height: 1.5;
+            color: black;
+            background-color: #f1f1f1;
+            background-clip: padding-box;
+            height: auto;
+            border: 1px solid #dadada;
+            border-radius: .357rem;
+        }
+        .description-box {
+            white-space: pre-wrap; /* Đảm bảo xuống dòng khi có khoảng trắng trong mô tả */
+            height: 200px; /* Chỉnh chiều cao giống textarea */
+            overflow-y: auto; /* Cho phép cuộn nếu văn bản dài */
+            font-family: Arial, sans-serif; /* Chỉnh font cho mô tả */
+            font-size: 14px; /* Chỉnh kích thước chữ */
+        }
+    </style>

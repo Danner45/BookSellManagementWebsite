@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Project_64130005.Models.KhachHang>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin_64130005/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="app-title">
+    <ul class="app-breadcrumb breadcrumb side">
+        <li class="breadcrumb-item active"><a href="#"><b>Danh sách khách hàng</b></a></li>
+    </ul>
+    <div id="clock"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6" style="padding:0">
+                        @using (Html.BeginForm("Index", "KhachHang_64130005", FormMethod.Get, new { @class = "dataTables_filter d-flex justify-content-start" }))
+                        {
+                            <label class="w-50">
+                                Tìm kiếm:
+                                @Html.TextBox("searchStr", null, new { @class = "form-control form-control-sm", @placeholder = "Email khách hàng" })
+                            </label>
+                        }
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        
+                    </div>
+                </div>
+                <dov class="row">
+                    <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0"
+                           id="sampleTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Họ Tên
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Ảnh đại diện
+                                </th>
+                                <th>
+                                    Địa chỉ
+                                </th>
+                                <th>
+                                    Ngày Sinh
+                                </th>
+                                <th>
+                                    Số điện thoại
+                                </th>
+                                <th>
+                                    Chức năng
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.dsKH)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.FullName()
+                                    </td>
+                                    <td>
+                                        @if (@item.Emai == null)
+                                        {
+                                            <p>Không có email</p>
+                                        }
+                                        else
+                                        {
+                                            @item.Emai
+                                        }
+                                    </td>
+                                    <td>
+                                        @if ((item.AnhKH) != null)
+                                        {
+                                            <img src="~/Images/KhachHang/@Url.Content(@item.AnhKH)" width="100" height="100" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/Images/KhachHang/user.jpg" width="100" height="100" />
+
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.DiaChi
+                                    </td>
+                                    <td>
+                                        @(item.NgaySinh?.ToString("dd/MM/yyyy"))
+                                    </td>
+                                    <td>
+                                        @item.SDT
+                                    </td>
+                                    <td class="table-td-center">
+                                        <button class="btn btn-primary btn-sm user-btn" type="button" title="Xem thông tin"
+                                                onclick="location.href='@Url.Action("Details", "KhachHang_64130005",new { MaKH = item.MaKH })'">
+                                            <i class="fas fa-user"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </dov>
+
+            </div>
+        </div>
+    </div>
+</div>

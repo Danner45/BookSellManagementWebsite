@@ -1,0 +1,81 @@
+﻿@model Project_64130005.Models.NhanVien
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+}
+
+@*<!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Login Admin</title>
+
+        <link rel="stylesheet" type="text/css" href="~/Assets/Admin/css/util.css">
+        <link rel="stylesheet" type="text/css" href="~/Assets/Admin/css/main.css">
+    </head>
+
+    <body class="bg-dark">
+        <div class="container">
+            <div class="card card-login mx-auto mt-5">
+                <div class="card-header">ĐĂNG NHẬP HỆ THỐNG QUẢN TRỊ</div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Login_64130005", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email</label>
+                            @Html.TextBoxFor(u => u.Email, null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(u => u.Email)
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            @Html.PasswordFor(u => u.MatKhau, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(u => u.MatKhau)
+                        </div>
+                        <input class="btn btn-primary btn-block" type="submit" value="Log In" />
+                    }
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+    </html>*@
+<div class="auth-form">
+    @using (Html.BeginForm("Login_64130005", "Home", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        @Html.AntiForgeryToken()
+        <div class="auth-form__container">
+            <div class="auth-form__header">
+                <h3 class="auth-form__heading">Đăng nhập trang quản trị</h3>
+            </div>
+            <div class="auth-form__form">
+
+                <div class="auth-form__group">
+                    @Html.TextBoxFor(m => m.Email, "", new { @class = "auth-form__input", @placeholder = "Email", @name = "email" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "validate" })
+                </div>
+                <div class="auth-form__group">
+                    @Html.PasswordFor(m => m.MatKhau, new { @class = "auth-form__input", @placeholder = "Mật khẩu", @name = "password" })
+                    @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "validate" })
+                </div>
+                @if (ViewBag.error != null)
+                {
+                    <span style="color: #ff0000; display:block; margin:4px">@ViewBag.error</span>
+                }
+            </div>
+            <div class="auth-form__controls">
+                <input type="submit" name="submit" class="btn btn--primary" value="Đăng nhập" />
+            </div>
+        </div>
+
+    }
+</div>

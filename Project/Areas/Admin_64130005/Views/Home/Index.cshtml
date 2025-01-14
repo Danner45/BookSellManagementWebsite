@@ -1,0 +1,231 @@
+﻿@using Newtonsoft.Json
+@model IEnumerable<Project_64130005.Models.DonHang>
+
+
+
+@{
+    ViewBag.Title = "Bảng điều khiển";
+    Layout = "~/Areas/Admin_64130005/Views/Shared/_LayoutAdmin.cshtml";
+    Project_64130005.Models.Project_64130005Entities1 db = new Project_64130005.Models.Project_64130005Entities1();
+    var dsKhachHang = db.KhachHangs.ToList();
+    var dsSach = db.Saches.ToList();
+    var dsDonHang = db.DonHangs.ToList();
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="app-title">
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="#"><b>Bảng điều khiển</b></a></li>
+            </ul>
+            <div id="clock"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <!--Left-->
+    <div class="col-md-12 col-lg-6">
+        <div class="row">
+            <!-- col-6 -->
+            <div class="col-md-6">
+                <div class="widget-small primary coloured-icon">
+                    <i class='icon bx bxs-user-account fa-3x'></i>
+                    <div class="info">
+                        <h4>Tổng khách hàng</h4>
+                        <p><b>@dsKhachHang.Count() khách hàng</b></p>
+                        <p class="info-tong">Tổng số khách hàng được quản lý.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- col-6 -->
+            <div class="col-md-6">
+                <div class="widget-small info coloured-icon">
+                    <i class='icon bx bxs-data fa-3x'></i>
+                    <div class="info">
+                        <h4>Tổng sản phẩm tồn kho</h4>
+                        <p><b>@dsSach.Count() sản phẩm</b></p>
+                        <p class="info-tong">Tổng số sản phẩm được quản lý.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- col-6 -->
+            <div class="col-md-6">
+                <div class="widget-small warning coloured-icon">
+                    <i class='icon bx bxs-shopping-bags fa-3x'></i>
+                    <div class="info">
+                        <h4>Tổng đơn hàng</h4>
+                        <p><b>@dsDonHang.Count() đơn hàng</b></p>
+                        <p class="info-tong">Tổng số hóa đơn bán hàng trong tháng.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- col-6 -->
+            <div class="col-md-6">
+                <div class="widget-small danger coloured-icon">
+                    <i class='icon bx bxs-error-alt fa-3x'></i>
+                    <div class="info">
+                        <h4>Sắp hết hàng</h4>
+                        <p>
+                            <b>
+                                @{
+                                    int var = 0;
+                                    foreach (var item in dsSach)
+                                    {
+                                        if (item.SoLuong < 50 && item.SoLuong > 0)
+                                        {
+                                            var++;
+                                        }
+                                    }
+                                }
+
+                                @var sản phẩm
+                            </b>
+                        </p>
+                        <p class="info-tong">Số sản phẩm cảnh báo có số lượng dưới 50.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- col-12 -->
+            <div class="col-md-12">
+                <div class="tile">
+                    <h3 class="tile-title">Đơn hàng cần được xử lí</h3>
+                    <div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th width="100">Mã đơn hàng</th>
+                                    <th>Tên khách hàng</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in dsDonHang)
+                                {
+                                    <tr>
+                                        @if (item.MaTrangThai == "Chưa giao hàng" || item.MaTrangThai == "Đang giao hàng")
+                                        {
+                                            <td>@item.MaDH</td>
+                                            if (item.KhachHang != null)
+                                            {
+                                                <td>@item.KhachHang.FullName()</td>
+                                            }
+                                            else
+                                            {
+                                                <td>null</td>
+
+                                            }
+                                            <td>
+                                                @String.Format("{0:#,0}", item.TongTien) ₫
+                                            </td>
+                                            <td>
+                                                @switch (item.TrangThaiDH.TrangThai)
+                                                {
+                                                    case "Chưa giao hàng":
+                                                        <span class="badge bg-info">@item.TrangThaiDH.TrangThai</span>
+                                                        break;
+                                                    case "Đang giao hàng":
+                                                        <span class="badge bg-warning">@item.TrangThaiDH.TrangThai</span>
+                                                        break;
+                                                }
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- / div trống-->
+                </div>
+            </div>
+            <!-- / col-12 -->
+        </div>
+    </div>
+    <!--END left-->
+    <!--Right-->
+    <div class="col-md-12 col-lg-6">
+        <div class="row">
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê số lượng sách bán được trong 12 tháng</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê số tiền bán được trong 12 tháng</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="barChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+         </div>
+
+
+    </div>
+    <!--END right-->
+</div>
+@*<script>
+    var dsOrder = db.Orders.ToList();
+    console.log(dsOrder)
+</script>*@
+<script src="~/Scripts/chart.min.js"></script>
+<script>
+        // Lấy dữ liệu từ ViewBag
+        var productCounts = @Html.Raw(Json.Encode(ViewBag.ProductCounts));
+        var revenues = @Html.Raw(Json.Encode(ViewBag.Revenues));
+        var months = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
+
+        // Biểu đồ line
+        var ctxLine = document.getElementById('lineChartDemo').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Số lượng sản phẩm',
+                    data: productCounts.map(function (item) {
+                        return item.SoLuong;
+                    }),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Biểu đồ bar
+        var ctxBar = document.getElementById('barChartDemo').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Doanh thu (VNĐ)',
+                    data: revenues.map(function (item) {
+                        return item.TongTien;
+                    }),
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+</script>
+
+<style>
+    .tile {
+        height: 400px;
+        overflow: auto;
+    }
+</style>

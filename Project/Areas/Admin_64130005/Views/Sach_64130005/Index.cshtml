@@ -1,0 +1,212 @@
+﻿@using Project_64130005.Models;
+@using PagedList.Mvc;
+@model PagedList.PagedList<Project_64130005.Models.Sach>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin_64130005/Views/Shared/_LayoutAdmin.cshtml";
+    var currentSearch = ViewBag.searchStr;
+    var currentSort = ViewBag.Sort;
+    var totalPage = Model.PageCount;
+    var dsProduct = ViewBag.products;
+}
+
+<div class="app-title">
+    <ul class="app-breadcrumb breadcrumb side">
+        <li class="breadcrumb-item active"><a href="#"><b>Danh sách sản phẩm</b></a></li>
+    </ul>
+    <div id="clock"></div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="row element-button">
+                    <div class="col-sm-2">
+                        <a class="btn btn-add btn-sm" href="@Url.Action("Index","TheLoai_64130005")">
+                            <i class="fas fa-folder-plus"></i> Danh mục thể loại
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-delete print-file btn-sm" href="@Url.Action("Create","Sach_64130005")">
+                            <i class="fas fa-plus"></i>
+                            Thêm sách
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-warning btn-sm" href="@Url.Action("Index","Sach_64130005", new {@sort = "pre-sold" })">
+                            Sắp hết hàng
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-danger btn-sm" href="@Url.Action("Index","Sach_64130005", new {@sort = "sold" })">
+                            Hết hàng
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-light btn-sm" href="@Url.Action("Index","Sach_64130005", new {@sort = "now" })">
+                            Cập nhật lần cuối
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-success btn-sm" href="@Url.Action("Index","Sach_64130005")">
+                            Mặc định
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row" style="align-items:center">
+                    <div class="col-sm-12 col-md-6">
+                        <span>Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/ @totalPage</span>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        @* Tìm kiếm sản phẩm trong admin  *@
+                        @using (Html.BeginForm("Index", "Sach_64130005", FormMethod.Get, new { @class = "dataTables_filter d-flex justify-content-end" }))
+                        {
+                            <label class="w-50">
+                                Tìm kiếm:
+
+                                @Html.TextBox("searchString", null, new { @class = "form-control form-control-sm", @placeholder = "Nhập tên hoặc thể loại sách" })
+
+                            </label>
+                        }
+                    </div>
+                </div>
+                <div id="sach-container">
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                            <tr>
+
+                                <th>Mã sách</th>
+                                <th style="max-width:332px">Tên sách</th>
+                                <th>Ảnh</th>
+                                <th>Số lượng</th>
+                                <th>Tình trạng</th>
+                                <th>Giá tiền</th>
+                                <th>Thể loại</th>
+                                <th>Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@item.MaSach</td>
+                                    <td style="max-width:332px">@item.TenSach</td>
+                                    <td>
+                                        @if (item.AnhSach == null)
+                                        {
+                                            <img src="~/Images/SanPham/holder.jpg" alt="Image" width="100" height="100" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/Images/SanPham/@Url.Content(@item.AnhSach)" alt="Image" width="100" height="100" />
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (@item.SoLuong >= 0)
+                                        {
+                                            @item.SoLuong
+                                        }
+                                        else
+                                        { <p>0</p>}
+                                    </td>
+                                    <td>
+                                        @{ if (item.SoLuong >= 50)
+                                            {
+                                                <span class="badge bg-success">Còn hàng</span> }
+                                            else if (item.SoLuong > 0 && item.SoLuong < 50)
+                                            {
+                                                <span class="badge badge-warning">Sắp hết hàng</span> }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Hết hàng</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>@string.Format("{0:#,0}", item.DonGia, "đ")</td>
+                                    <td>@item.TheLoai.TenLoai</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
+                                                onclick="location.href='@Url.Action("Delete", "Sach_64130005",new { id = item.MaSach })'">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
+                                                onclick="location.href='@Url.Action("Edit", "Sach_64130005",new { id = item.MaSach })'">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-primary btn-sm user-btn" type="button" title="Xem thông tin"
+                                                onclick="location.href='@Url.Action("Details", "Sach_64130005",new { id = item.MaSach })'">
+                                            <i class="fas fa-user"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                    @* Tạo liên kết các trang *@
+                    @if (totalPage > 1)
+                    {
+                        <div class="MenuTrang pagination">
+                            @Html.PagedListPager(Model, page => Url.Action("Index", new { searchString = currentSearch, page = page}),
+                           new PagedListRenderOptions
+                           {
+                               LiElementClasses = new[] { "page-item" }, // Lớp cho <li>
+                               UlElementClasses = new[] { "pagination" }, // Lớp cho <ul>
+                           })
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).on('click', '.pagination a', function (e) {
+        e.preventDefault(); // Ngăn không cho trang tải lại
+        var url = $(this).attr('href'); // Lấy URL của trang mới
+        $.get(url, function (data) {
+            $('#sach-container').html($(data).find('#sach-container').html()); // Cập nhật danh sách
+        });
+    });
+</script>
+
+<style>
+    .pagination {
+        display: flex;
+        justify-content: left;
+        list-style: none;
+        padding: 0;
+    }
+
+    .page-item {
+        margin: 0;
+    }
+
+        .page-item a {
+            display: block;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .page-item.active a {
+            background-color: #044785;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .page-item a:hover {
+            background-color: #044785;
+            color: white;
+            border-color: #ddd;
+        }
+
+</style>

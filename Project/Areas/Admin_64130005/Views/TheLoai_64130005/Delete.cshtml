@@ -1,0 +1,27 @@
+﻿@model Project_64130005.Models.TheLoai
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/Admin_64130005/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="confirm__delete">
+    <h3>Bạn có chắc muốn xóa thể loại này? Những sách thuộc thể loại này sẽ bị xóa theo!</h3>
+    <hr />
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-save" />
+            @Html.ActionLink("Quay về", "Index", null, new { @class = "btn btn-cancel" })
+        </div>
+    }
+</div>
+
+<style>
+    .confirm__delete {
+        padding: 250px 300px;
+        background-color: rgb(166 200 236);
+    }
+</style>

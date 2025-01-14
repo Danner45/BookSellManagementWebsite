@@ -1,0 +1,257 @@
+﻿@using Project_64130005.Models
+@using PagedList.Mvc;
+@model PagedList.PagedList<Project_64130005.Models.DonHang>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin_64130005/Views/Shared/_LayoutAdmin.cshtml";
+    Project_64130005Entities1 db = new Project_64130005Entities1();
+    var orderDetail = from s in db.ChiTietDHs select s;
+    ViewBag.orderDetail = orderDetail.ToList();
+    var currentSearch = ViewBag.searchStr;
+    var currentSort = ViewBag.Sort;
+    var totalPage = Model.PageCount;
+    var dsNhanVien = ViewBag.nhanviens;
+}
+
+<div class="app-title">
+    <ul class="app-breadcrumb breadcrumb side">
+        <li class="breadcrumb-item active"><a href="#"><b>Danh sách đơn hàng</b></a></li>
+    </ul>
+    <div id="clock"></div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="row element-button">
+                    <div class="col-sm-2">
+
+                        <a class="btn btn-info btn-sm" href="@Url.Action("Index","DonHang_64130005",new {sort = "Wait" })">
+                            Chưa giao hàng
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+
+                        <a class="btn btn-warning btn-sm" href="@Url.Action("Index","DonHang_64130005",new { sort = "Deli" })">
+                            Đang giao hàng
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+
+                        <a class="btn btn-success btn-sm" href="@Url.Action("Index","DonHang_64130005",new { sort = "Done" })">
+                            Hoàn thành
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+
+                        <a class="btn btn-danger btn-sm" href="@Url.Action("Index","DonHang_64130005",new { sort = "Cancel" })">
+                            Đã hủy
+                        </a>
+                    </div>
+                    <div class="col-sm-2">
+
+                        <a class="btn btn-cancel btn-sm" href="@Url.Action("Index","DonHang_64130005")">
+                            Mặc định
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row" style="align-items:center">
+                    <div class="col-sm-12 col-md-6">
+                        <span>Trang @*@(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)/ @totalPage*@</span>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        @* Tìm kiếm sản phẩm trong admin - Phạm Duy *@
+                        @using (Html.BeginForm("Index", "DonHang_64130005", FormMethod.Get, new { @class = "dataTables_filter d-flex justify-content-end" }))
+                        {
+                            <label>
+                                Tìm kiếm:
+
+                                @Html.TextBox("searchStr", null, new { @class = "form-control form-control-sm", @placeholder = "Nhập số điện thoại khách hàng" })
+
+                            </label>
+                        }
+                    </div>
+                </div>
+
+
+                <div id="sach-container">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                ID đơn hàng
+                            </th>
+                            <th>
+                                Khách hàng
+                            </th>
+                            <th>
+                                Đơn hàng
+                            </th>
+                            <th>
+                                Số lượng
+                            </th>
+                            <th>
+                                Tổng tiền
+                            </th>
+                            <th>
+                                Tình trạng
+                            </th>
+                            <th>
+                                Tính năng
+                            </th>
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.MaDH
+                                </td>
+                                <td>
+                                    @if (item.KhachHang != null)
+                                    {
+                                        @item.KhachHang.FullName()
+                                    }
+                                    else
+                                    {
+                                        <p>Chưa đăng ký tài khoản trong hệ thống</p>
+                                    }
+
+                                </td>
+                                <td>
+                                    @foreach (var product in ViewBag.orderDetail)
+                                    {
+
+                                        if (item.MaDH == product.MaDH)
+                                        {
+                                            <p>@product.Sach.TenSach <span style="font-weight:bold">x @product.SoLuong</span></p>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @item.TongSoLuong
+                                </td>
+                                <td>
+                                    @string.Format("{0:#,0}", item.TongTien)
+                                </td>
+                                <td>
+                                    @switch (item.MaTrangThai)
+                                    {
+                                        case "Chưa giao hàng":
+                                            <span class="badge bg-info">@item.MaTrangThai</span>
+                                            break;
+                                        case "Hoàn thành":
+                                            <span class="badge bg-success">@item.MaTrangThai</span>
+                                            break;
+                                        case "Đang giao hàng":
+                                            <span class="badge bg-warning">@item.MaTrangThai</span>
+                                            break;
+                                        case "Đã hủy":
+                                            <span class="badge bg-danger">@item.MaTrangThai</span>
+                                            break;
+                                    }
+
+                                </td>
+                                <td class="table-td-center">
+
+                                    @if (item.MaTrangThai == "Chưa giao hàng")
+                                    {
+                                        <button class="btn btn-warning btn-sm" type="button" title="Sửa"
+                                                onclick="location.href='@Url.Action("Edit", "DonHang_64130005",new { MaDH = item.MaDH })'">
+                                            Xử lí đơn hàng
+                                        </button>
+                                    }
+                                    @if (item.MaTrangThai == "Đang giao hàng")
+                                    {
+                                        <button class="btn btn-success btn-sm edit" type="button" title="Sửa"
+                                                onclick="location.href='@Url.Action("Edit", "DonHang_64130005",new { MaDH = item.MaDH })'">
+                                            Xác nhận giao hàng
+                                        </button>
+
+                                    }
+                                    @if (item.MaTrangThai == "Hoàn thành" || item.MaTrangThai == "Đã hủy")
+                                    {
+                                        <button class="btn btn-primary btn-sm user-btn" type="button" title="Xem chi tiết"
+                                                onclick="location.href='@Url.Action("Details", "DonHang_64130005", new { MaDH = item.MaDH })'">
+                                            Xem đơn hàng
+                                        </button>
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+
+                    </table>
+                    @* Tạo liên kết các trang *@
+                    @if (totalPage > 1)
+                    {
+                        <div class="MenuTrang pagination">
+                            @Html.PagedListPager(Model, page => Url.Action("Index", new { searchString = currentSearch, page = page }),
+                           new PagedListRenderOptions
+                           {
+                               LiElementClasses = new[] { "page-item" }, // Lớp cho <li>
+                               UlElementClasses = new[] { "pagination" }, // Lớp cho <ul>
+                           })
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).on('click', '.pagination a', function (e) {
+        e.preventDefault(); // Ngăn không cho trang tải lại
+        var url = $(this).attr('href'); // Lấy URL của trang mới
+        $.get(url, function (data) {
+            $('#sach-container').html($(data).find('#sach-container').html()); // Cập nhật danh sách
+        });
+    });
+</script>
+
+
+<style>
+    tr.label th {
+        text-align: center;
+    }
+
+    td img {
+        object-fit: cover
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: left;
+        list-style: none;
+        padding: 0;
+    }
+
+    .page-item {
+        margin: 0;
+    }
+
+        .page-item a {
+            display: block;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .page-item.active a {
+            background-color: #044785;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .page-item a:hover {
+            background-color: #044785;
+            color: white;
+            border-color: #ddd;
+        }
+</style>
